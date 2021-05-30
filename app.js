@@ -3,24 +3,28 @@ const formSearchToDo = document.querySelector('.form-search')
 const todosContainer = document.querySelector('.todos-container')
 const regex = /.[a-zA-ZçÇ]/
 
-const createTodo = event => {
+const createTodo = inputValue => {
+  const li = document.createElement('li')
+  const span = document.createElement('span')
+  const i = document.createElement('i')
+
+  li.classList
+    .add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center')
+
+  li.appendChild(span)
+  span.textContent = inputValue
+  li.appendChild(i)
+  i.classList.add('far', 'fa-trash-alt', 'delete')
+
+  todosContainer.appendChild(li)
+}
+
+const addTodo = event => {
   event.preventDefault()
   const inputValue = event.target.add.value
 
   if (regex.test(inputValue)) {
-    const li = document.createElement('li')
-    const span = document.createElement('span')
-    const i = document.createElement('i')
-
-    li.classList
-      .add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center')
-
-    li.appendChild(span)
-    span.textContent = inputValue
-    li.appendChild(i)
-    i.classList.add('far', 'fa-trash-alt', 'delete')
-
-    todosContainer.appendChild(li)
+    createTodo(inputValue)
   }
 
   event.target.reset()
@@ -62,6 +66,6 @@ const filterTodos = event => {
   })
 }
 
-formAddToDo.addEventListener('submit', createTodo)
+formAddToDo.addEventListener('submit', addTodo)
 todosContainer.addEventListener('click', deleteTodo)
 formSearchToDo.addEventListener('input', filterTodos)
