@@ -3,43 +3,50 @@ const formSearchToDo = document.querySelector('.form-search')
 const todosContainer = document.querySelector('.todos-container')
 const regex = /.[a-zA-ZçÇ]/
 
-formAddToDo.addEventListener('submit', event => {
+const createTodo = event => {
   event.preventDefault()
-
   const inputValue = event.target.add.value
 
-  const createTodoItem = `
-      <li class="list-group-item d-flex justify-content-between align-items-center">
-        <span>${inputValue}</span>
-        <i class="far fa-trash-alt delete"></i>
-      </li>`
-
   if (regex.test(inputValue)) {
-    todosContainer.innerHTML += createTodoItem
+    const li = document.createElement('li')
+    const span = document.createElement('span')
+    const i = document.createElement('i')
+
+    li.classList
+      .add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center')
+
+    li.appendChild(span)
+    span.textContent = inputValue
+    li.appendChild(i)
+    i.classList.add('far', 'fa-trash-alt', 'delete')
+
+    todosContainer.appendChild(li)
   }
 
   event.target.reset()
-})
+}
 
-todosContainer.addEventListener('click', event => {
+const deleteParentElement = element => element.parentElement.remove()
+
+const deleteTodo = event => {
   const hasClassDelete = Array.from(event.target.classList).includes('delete')
 
   if (hasClassDelete) {
-    event.target.parentElement.remove()
+    deleteParentElement(event.target)
   }
-})
+}
 
-const showSearchElement = element => {
+const showTodo = element => {
   element.classList.add('d-flex')
   element.classList.remove('hidden')
 }
 
-const removeSearchElement = element => {
+const hideTodo = element => {
   element.classList.remove('d-flex')
   element.classList.add('hidden')
 }
 
-formSearchToDo.addEventListener('input', event => {
+const filterTodos = event => {
   const searchValue = event.target.value.trim()
   const todoItems = Array.from(todosContainer.children)
 
@@ -48,9 +55,13 @@ formSearchToDo.addEventListener('input', event => {
       .toLowerCase().includes(searchValue)
 
     if (isInputValueIncludes) {
-      showSearchElement(element)
+      showTodo(element)
     } else {
-      removeSearchElement(element)
+      hideTodo(element)
     }
   })
-})
+}
+
+formAddToDo.addEventListener('submit', createTodo)
+todosContainer.addEventListener('click', deleteTodo)
+formSearchToDo.addEventListener('input', filterTodos)
