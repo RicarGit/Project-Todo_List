@@ -1,9 +1,9 @@
-const formAddToDo = document.querySelector('.form-add-todo')
-const formSearchToDo = document.querySelector('.form-search')
-const todosContainer = document.querySelector('.todos-container')
+const formAddToDo = document.querySelector('.form-add-todo') as HTMLFormElement
+const formSearchToDo = document.querySelector('.form-search') as HTMLFormElement
+const todosContainer = document.querySelector('.todos-container') as HTMLUListElement
 const regex = /.[a-zA-ZçÇ]/
 
-const createTodo = inputValue => {
+const createTodo = (inputValue: string) => {
   const li = document.createElement('li')
   const span = document.createElement('span')
   const i = document.createElement('i')
@@ -19,39 +19,39 @@ const createTodo = inputValue => {
   todosContainer.appendChild(li)
 }
 
-const addTodo = event => {
-  event.preventDefault()
-  const inputValue = event.target.add.value
+const addTodo = (e: Event) => {
+  e.preventDefault()
+  const inputValue = e.target.add.value
 
   if (regex.test(inputValue)) {
     createTodo(inputValue)
   }
 
-  event.target.reset()
+  e.target.reset()
 }
 
-const deleteParentElement = element => element.parentElement.remove()
+const deleteParentElement = (element: HTMLElement) => element.parentElement.remove()
 
-const deleteTodo = event => {
-  const hasClassDelete = Array.from(event.target.classList).includes('delete')
+const deleteTodo = (e: Event) => {
+  const hasClassDelete = Array.from(e.target.classList).includes('delete')
 
   if (hasClassDelete) {
-    deleteParentElement(event.target)
+    deleteParentElement(e.target)
   }
 }
 
-const showTodo = element => {
+const showTodo = (element: HTMLElement) => {
   element.classList.add('d-flex')
   element.classList.remove('hidden')
 }
 
-const hideTodo = element => {
+const hideTodo = (element: HTMLElement) => {
   element.classList.remove('d-flex')
   element.classList.add('hidden')
 }
 
-const filterTodos = event => {
-  const searchValue = event.target.value.trim()
+const filterTodos = (e: Event) => {
+  const searchValue = e.target.value.trim()
   const todoItems = Array.from(todosContainer.children)
 
   todoItems.forEach(element => {
