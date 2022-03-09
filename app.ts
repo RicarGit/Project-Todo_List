@@ -19,8 +19,9 @@ const createTodo = (inputValue: string) => {
   todosContainer.appendChild(li)
 }
 
-const addTodo = (e: Event) => {
+const addTodo = e => {
   e.preventDefault()
+
   const inputValue = e.target.add.value
 
   if (regex.test(inputValue)) {
@@ -30,9 +31,13 @@ const addTodo = (e: Event) => {
   e.target.reset()
 }
 
-const deleteParentElement = (element: HTMLElement) => element.parentElement.remove()
+const deleteParentElement = (el: Element) => {
+  if (el.parentElement) {
+    el.parentElement.remove()
+  }
+}
 
-const deleteTodo = (e: Event) => {
+const deleteTodo = e => {
   const hasClassDelete = Array.from(e.target.classList).includes('delete')
 
   if (hasClassDelete) {
@@ -40,29 +45,24 @@ const deleteTodo = (e: Event) => {
   }
 }
 
-const showTodo = (element: HTMLElement) => {
-  element.classList.add('d-flex')
-  element.classList.remove('hidden')
+const showTodo = (el: Element) => {
+  el.classList.add('d-flex')
+  el.classList.remove('hidden')
 }
 
-const hideTodo = (element: HTMLElement) => {
-  element.classList.remove('d-flex')
-  element.classList.add('hidden')
+const hideTodo = (el: Element) => {
+  el.classList.remove('d-flex')
+  el.classList.add('hidden')
 }
 
-const filterTodos = (e: Event) => {
+const filterTodos = e => {
   const searchValue = e.target.value.trim()
   const todoItems = Array.from(todosContainer.children)
 
-  todoItems.forEach(element => {
-    const isInputValueIncludes = element.textContent
-      .toLowerCase().includes(searchValue)
+  todoItems.forEach(el => {
+    const isInputValueIncludes = el.textContent?.toLowerCase().includes(searchValue)
 
-    if (isInputValueIncludes) {
-      showTodo(element)
-    } else {
-      hideTodo(element)
-    }
+    isInputValueIncludes ? showTodo(el) : hideTodo(el)
   })
 }
 
