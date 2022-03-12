@@ -19,16 +19,21 @@ const createTodo = (inputValue: string) => {
   todosContainer.appendChild(li)
 }
 
-const addTodo = e => {
+const addTodo = (e: SubmitEvent) => {
   e.preventDefault()
+  const target = e.target as HTMLFormElement
 
-  const inputValue = e.target.add.value
+  if (!target) {
+    return
+  }
+
+  const inputValue: string = target.add.value
 
   if (regex.test(inputValue)) {
     createTodo(inputValue)
   }
 
-  e.target.reset()
+  target.reset()
 }
 
 const deleteParentElement = (el: Element) => {
@@ -37,11 +42,17 @@ const deleteParentElement = (el: Element) => {
   }
 }
 
-const deleteTodo = e => {
-  const hasClassDelete = Array.from(e.target.classList).includes('delete')
+const deleteTodo = (e: MouseEvent) => {
+  const target = e.target as HTMLButtonElement
+
+  if (!target) {
+    return
+  }
+
+  const hasClassDelete = Array.from(target.classList).includes('delete')
 
   if (hasClassDelete) {
-    deleteParentElement(e.target)
+    deleteParentElement(target)
   }
 }
 
@@ -55,8 +66,10 @@ const hideTodo = (el: Element) => {
   el.classList.add('hidden')
 }
 
-const filterTodos = e => {
-  const searchValue = e.target.value.trim()
+const filterTodos = (e: Event) => {
+  const target = e.target as HTMLInputElement
+
+  const searchValue = target.value.trim()
   const todoItems = Array.from(todosContainer.children)
 
   todoItems.forEach(el => {
