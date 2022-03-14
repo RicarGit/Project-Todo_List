@@ -3,7 +3,7 @@ const formAddToDo = document.querySelector('.form-add-todo');
 const formSearchToDo = document.querySelector('.form-search');
 const todosContainer = document.querySelector('.todos-container');
 const regex = /.[a-zA-ZçÇ]/;
-const createTodo = inputValue => {
+const createTodo = (inputValue) => {
     const li = document.createElement('li');
     const span = document.createElement('span');
     const i = document.createElement('i');
@@ -15,41 +15,49 @@ const createTodo = inputValue => {
     i.classList.add('far', 'fa-trash-alt', 'delete');
     todosContainer.appendChild(li);
 };
-const addTodo = event => {
-    event.preventDefault();
-    const inputValue = event.target.add.value;
+const addTodo = (e) => {
+    e.preventDefault();
+    const target = e.target;
+    if (!target) {
+        return;
+    }
+    const inputValue = target.add.value;
     if (regex.test(inputValue)) {
         createTodo(inputValue);
     }
-    event.target.reset();
+    target.reset();
 };
-const deleteParentElement = element => element.parentElement.remove();
-const deleteTodo = event => {
-    const hasClassDelete = Array.from(event.target.classList).includes('delete');
-    if (hasClassDelete) {
-        deleteParentElement(event.target);
+const deleteParentElement = (el) => {
+    if (el.parentElement) {
+        el.parentElement.remove();
     }
 };
-const showTodo = element => {
-    element.classList.add('d-flex');
-    element.classList.remove('hidden');
+const deleteTodo = (e) => {
+    const target = e.target;
+    if (!target) {
+        return;
+    }
+    const hasClassDelete = Array.from(target.classList).includes('delete');
+    if (hasClassDelete) {
+        deleteParentElement(target);
+    }
 };
-const hideTodo = element => {
-    element.classList.remove('d-flex');
-    element.classList.add('hidden');
+const showTodo = (el) => {
+    el.classList.add('d-flex');
+    el.classList.remove('hidden');
 };
-const filterTodos = event => {
-    const searchValue = event.target.value.trim();
+const hideTodo = (el) => {
+    el.classList.remove('d-flex');
+    el.classList.add('hidden');
+};
+const filterTodos = (e) => {
+    const target = e.target;
+    const searchValue = target.value.toLowerCase().trim();
     const todoItems = Array.from(todosContainer.children);
-    todoItems.forEach(element => {
-        const isInputValueIncludes = element.textContent
-            .toLowerCase().includes(searchValue);
-        if (isInputValueIncludes) {
-            showTodo(element);
-        }
-        else {
-            hideTodo(element);
-        }
+    todoItems.forEach(el => {
+        var _a;
+        const isInputValueIncludes = (_a = el.textContent) === null || _a === void 0 ? void 0 : _a.toLowerCase().includes(searchValue);
+        isInputValueIncludes ? showTodo(el) : hideTodo(el);
     });
 };
 formAddToDo.addEventListener('submit', addTodo);

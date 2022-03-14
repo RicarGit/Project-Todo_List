@@ -69,7 +69,7 @@ const hideTodo = (el: Element) => {
 const filterTodos = (e: Event) => {
   const target = e.target as HTMLInputElement
 
-  const searchValue = target.value.trim()
+  const searchValue = target.value.toLowerCase().trim()
   const todoItems = Array.from(todosContainer.children)
 
   todoItems.forEach(el => {
