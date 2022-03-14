@@ -19,6 +19,17 @@ const createTodo = (inputValue: string) => {
   todosContainer.appendChild(li)
 }
 
+const checkIfTodoExists = () => {
+  if (!todosContainer.children.length) {
+    formSearchToDo.setAttribute('class', 'hidden')
+    h3.textContent = 'Não existe nenhum To-do criado, crie um logo abaixo!'
+    h3.classList.remove('hidden')
+    return
+  }
+
+  h3.classList.add('hidden')
+  formSearchToDo.classList.remove('hidden')
+}
 const addTodo = (e: SubmitEvent) => {
   e.preventDefault()
   const target = e.target as HTMLFormElement
@@ -82,3 +93,4 @@ const filterTodos = (e: Event) => {
 formAddToDo.addEventListener('submit', addTodo)
 todosContainer.addEventListener('click', deleteTodo)
 formSearchToDo.addEventListener('input', filterTodos)
+window.addEventListener('load', checkIfTodoExists)
