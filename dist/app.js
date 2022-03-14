@@ -2,6 +2,7 @@
 const formAddToDo = document.querySelector('.form-add-todo');
 const formSearchToDo = document.querySelector('.form-search');
 const todosContainer = document.querySelector('.todos-container');
+const h3 = document.querySelector('.not-found-todo');
 const regex = /.[a-zA-ZçÇ]/;
 const createTodo = (inputValue) => {
     const li = document.createElement('li');
@@ -15,6 +16,20 @@ const createTodo = (inputValue) => {
     i.classList.add('far', 'fa-trash-alt', 'delete');
     todosContainer.appendChild(li);
 };
+const checkIfTodoExists = () => {
+    if (!todosContainer.children.length) {
+        formSearchToDo.setAttribute('class', 'hidden');
+        h3.textContent = 'Não existe nenhum To-do criado, crie um logo abaixo!';
+        h3.classList.remove('hidden');
+        return;
+    }
+    h3.classList.add('hidden');
+    formSearchToDo.classList.remove('hidden');
+};
+const notFoundTodoMessage = () => {
+    h3.textContent = 'Não encontramos nenhum To-do com esse nome!';
+    h3.classList.remove('hidden');
+};
 const addTodo = (e) => {
     e.preventDefault();
     const target = e.target;
@@ -26,6 +41,7 @@ const addTodo = (e) => {
         createTodo(inputValue);
     }
     target.reset();
+    checkIfTodoExists();
 };
 const deleteParentElement = (el) => {
     if (el.parentElement) {
@@ -40,7 +56,9 @@ const deleteTodo = (e) => {
     const hasClassDelete = Array.from(target.classList).includes('delete');
     if (hasClassDelete) {
         deleteParentElement(target);
+        target.removeEventListener('click', deleteTodo);
     }
+    checkIfTodoExists();
 };
 const showTodo = (el) => {
     el.classList.add('d-flex');
@@ -59,7 +77,13 @@ const filterTodos = (e) => {
         const isInputValueIncludes = (_a = el.textContent) === null || _a === void 0 ? void 0 : _a.toLowerCase().includes(searchValue);
         isInputValueIncludes ? showTodo(el) : hideTodo(el);
     });
+    if (todoItems.every(el => el.classList.contains('hidden'))) {
+        notFoundTodoMessage();
+        return;
+    }
+    h3.classList.add('hidden');
 };
 formAddToDo.addEventListener('submit', addTodo);
 todosContainer.addEventListener('click', deleteTodo);
 formSearchToDo.addEventListener('input', filterTodos);
+window.addEventListener('load', checkIfTodoExists);
