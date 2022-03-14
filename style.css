@@ -20,3 +20,9 @@ input[type=text]:focus {
 .hidden {
   display: none;
 }
+
+h3 {
+  text-align: center;
+  margin: 20px 0px 50px 0px;
+  color: #fff;
+}
