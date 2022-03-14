@@ -1,6 +1,7 @@
 const formAddToDo = document.querySelector('.form-add-todo') as HTMLFormElement
 const formSearchToDo = document.querySelector('.form-search') as HTMLFormElement
 const todosContainer = document.querySelector('.todos-container') as HTMLUListElement
+const h3 = document.querySelector('.not-found-todo') as HTMLHRElement
 const regex = /.[a-zA-ZçÇ]/
 
 const createTodo = (inputValue: string) => {
@@ -30,10 +31,12 @@ const checkIfTodoExists = () => {
   h3.classList.add('hidden')
   formSearchToDo.classList.remove('hidden')
 }
+
 const notFoundTodoMessage = () => {
   h3.textContent = 'Não encontramos nenhum To-do com esse nome!'
   h3.classList.remove('hidden')
 }
+
 const addTodo = (e: SubmitEvent) => {
   e.preventDefault()
   const target = e.target as HTMLFormElement
@@ -49,6 +52,7 @@ const addTodo = (e: SubmitEvent) => {
   }
 
   target.reset()
+  checkIfTodoExists()
 }
 
 const deleteParentElement = (el: Element) => {
@@ -59,7 +63,6 @@ const deleteParentElement = (el: Element) => {
 
 const deleteTodo = (e: MouseEvent) => {
   const target = e.target as HTMLButtonElement
-
   if (!target) {
     return
   }
@@ -68,7 +71,10 @@ const deleteTodo = (e: MouseEvent) => {
 
   if (hasClassDelete) {
     deleteParentElement(target)
+    target.removeEventListener('click', deleteTodo)
   }
+
+  checkIfTodoExists()
 }
 
 const showTodo = (el: Element) => {
@@ -92,6 +98,13 @@ const filterTodos = (e: Event) => {
 
     isInputValueIncludes ? showTodo(el) : hideTodo(el)
   })
+
+  if (todoItems.every(el => el.classList.contains('hidden'))) {
+    notFoundTodoMessage()
+    return
+  }
+
+  h3.classList.add('hidden')
 }
 
 formAddToDo.addEventListener('submit', addTodo)
