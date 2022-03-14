@@ -30,6 +30,10 @@ const checkIfTodoExists = () => {
   h3.classList.add('hidden')
   formSearchToDo.classList.remove('hidden')
 }
+const notFoundTodoMessage = () => {
+  h3.textContent = 'Não encontramos nenhum To-do com esse nome!'
+  h3.classList.remove('hidden')
+}
 const addTodo = (e: SubmitEvent) => {
   e.preventDefault()
   const target = e.target as HTMLFormElement
