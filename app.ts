@@ -20,21 +20,22 @@ const createTodo = (inputValue: string) => {
   todosContainer.appendChild(li)
 }
 
+const notFoundTodoMessage = (message: string) => {
+  h3.textContent = message
+  h3.classList.remove('hidden')
+}
+
 const checkIfTodoExists = () => {
-  if (!todosContainer.children.length) {
+  const notExistsTodo = !todosContainer.children.length
+
+  if (notExistsTodo) {
     formSearchToDo.setAttribute('class', 'hidden')
-    h3.textContent = 'Não existe nenhum To-do criado, crie um logo abaixo!'
-    h3.classList.remove('hidden')
+    notFoundTodoMessage('Não existe nenhum To-do criado, crie um logo abaixo!')
     return
   }
 
   h3.classList.add('hidden')
   formSearchToDo.classList.remove('hidden')
-}
-
-const notFoundTodoMessage = () => {
-  h3.textContent = 'Não encontramos nenhum To-do com esse nome!'
-  h3.classList.remove('hidden')
 }
 
 const addTodo = (e: SubmitEvent) => {
@@ -95,12 +96,13 @@ const filterTodos = (e: Event) => {
 
   todoItems.forEach(el => {
     const isInputValueIncludes = el.textContent?.toLowerCase().includes(searchValue)
-
     isInputValueIncludes ? showTodo(el) : hideTodo(el)
   })
 
-  if (todoItems.every(el => el.classList.contains('hidden'))) {
-    notFoundTodoMessage()
+  const hasHiddenClass = (el: Element) => el.classList.contains('hidden')
+
+  if (todoItems.every(hasHiddenClass)) {
+    notFoundTodoMessage('Não encontramos nenhum To-do com esse nome!')
     return
   }
 
