@@ -16,18 +16,19 @@ const createTodo = (inputValue) => {
     i.classList.add('far', 'fa-trash-alt', 'delete');
     todosContainer.appendChild(li);
 };
-const notFoundTodoMessage = (message) => {
+const showNotFoundTodoMessage = (message) => {
     h3.textContent = message;
     h3.classList.remove('hidden');
 };
+const hideNotFoundTodoMessage = () => h3.classList.add('hidden');
 const checkIfTodoExists = () => {
     const notExistsTodo = !todosContainer.children.length;
     if (notExistsTodo) {
         formSearchToDo.setAttribute('class', 'hidden');
-        notFoundTodoMessage('Não existe nenhum To-do criado, crie um logo abaixo!');
+        showNotFoundTodoMessage('Não existe nenhum To-do criado, crie um logo abaixo!');
         return;
     }
-    h3.classList.add('hidden');
+    hideNotFoundTodoMessage();
     formSearchToDo.classList.remove('hidden');
 };
 const addTodo = (e) => {
@@ -79,10 +80,10 @@ const filterTodos = (e) => {
     });
     const hasHiddenClass = (el) => el.classList.contains('hidden');
     if (todoItems.every(hasHiddenClass)) {
-        notFoundTodoMessage('Não encontramos nenhum To-do com esse nome!');
+        showNotFoundTodoMessage('Não encontramos nenhum To-do com esse nome!');
         return;
     }
-    h3.classList.add('hidden');
+    hideNotFoundTodoMessage();
 };
 formAddToDo.addEventListener('submit', addTodo);
 todosContainer.addEventListener('click', deleteTodo);
